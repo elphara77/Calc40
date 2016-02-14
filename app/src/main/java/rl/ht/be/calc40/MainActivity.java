@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import rl.ht.be.calc40.core.Engine;
+import rl.ht.be.calc40.utils.Utils;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -57,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
                         addToDisplay(".");
                         break;
                     case R.id.buttonPlus:
+                        Engine.setOp("+");
+                        String aStr=display.getText().toString();
+                        Engine.setA(aStr);
                         addToDisplay("+");
                         break;
                     case R.id.buttonMinus:
@@ -69,7 +75,22 @@ public class MainActivity extends AppCompatActivity {
                         addToDisplay("/");
                         break;
                     case R.id.buttonEnter:
-                        addToDisplay("=");
+                        String bStr = display.getText().toString();
+                        bStr = bStr.substring(Engine.getaStr().length() + 1, bStr.length());
+                        Engine.setB(bStr);
+                        Double result = 0.;
+                        if ("+".equals(Engine.getOp())) {
+                            result = Engine.plus();
+                        } else if ("-".equals(Engine.getOp())) {
+                            result = Engine.minus();
+                        } else if ("/".equals(Engine.getOp())) {
+                            result = Engine.div();
+                        } else if ("*".equals(Engine.getOp())) {
+                            result = Engine.mult();
+                        } else if ("^".equals(Engine.getOp())) {
+                            result = Engine.pow();
+                        }
+                        display.setText(Utils.getString(result));
                         break;
                 }
             }
